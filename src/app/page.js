@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from 'react';
 import Header from '@components/Header';
 import Footer from '@components/Footer';
 import SkillCard from '@components/SkillCard';
@@ -5,6 +8,7 @@ import ProjectCard from '@components/ProjectCard';
 import Link from 'next/link';
 
 export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   //スキルカードのコンポーネントの値
   const skillList = [
@@ -58,6 +62,7 @@ export default function Home() {
       title: 'AQ-Residence',
       text: '不動産サイトのリプレイス、パフォーマンス最適化',
       languages: ["HTML", "CSS", "JavaScript"],
+      category: 'corporate'
     },
     {
       id: '2',
@@ -65,36 +70,47 @@ export default function Home() {
       title: 'なごやかクリニック',
       text: '医療クリニックの公式サイト制作',
       languages: ["PHP", "WordPress", "JavaScript"],
+      category: 'corporate'
     },
     {
       id: '3',
       image: '/miyakoshi-holdings.png',
       title: '宮越ホールディングス',
       text: '企業ブランディングを重視したグローバル対応サイト',
-      languages: ["PHP", "WordPress", "JavaScript"]
+      languages: ["PHP", "WordPress", "JavaScript"],
+      category: 'corporate'
     },
     {
       id: '4',
       image: '/pivotta.png',
       title: 'pivotta',
       text: '企業向け動画配信サービスのLP構築',
-      languages: ["PHP", "WordPress", "JavaScript"]
+      languages: ["PHP", "WordPress", "JavaScript"],
+      category: 'app'
     },
     {
       id: '5',
       image: '/SmartES.png',
       title: 'SmartES',
       text: 'AIを活用したSaaS型ES効率化アプリの開発',
-      languages: ["React", "TypeScript"]
+      languages: ["React", "TypeScript"],
+      category: 'app'
     },
     {
       id: '6',
       image: '/primekaji.png',
       title: '家事代行プライムカジ',
       text: '人材マッチングサービスのLP構築',
-      languages: ["HTML", "CSS", "JavaScript", "PHP"]
+      languages: ["HTML", "CSS", "JavaScript", "PHP"],
+      category: 'lp'
     }
   ];
+
+  const filteredList =
+    selectedCategory === 'all'
+      ? workList
+      : workList.filter((work) => work.category === selectedCategory);
+
   return (
     <>
     <Header />
@@ -176,14 +192,14 @@ export default function Home() {
         <section id="works" className="py-24 px-8 md:px-20">
           <div className="container mx-auto">
             <h2 className="section-heading text-3xl mb-16">Works</h2>
-            <div className="flex justify-center gap-4">
-              <button className="border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider hover:text-black hover:bg-white duration-300">All</button>
-              <button className="border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider hover:text-black hover:bg-white duration-300">LP制作</button>
-              <button className="border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider hover:text-black hover:bg-white duration-300">Web制作</button>
-              <button className="border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider hover:text-black hover:bg-white duration-300">Webアプリ</button>
+            <div className="flex justify-center gap-4 flex-wrap">
+              <button className={`border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider duration-300 ${selectedCategory === 'all' ? 'bg-white text-black' : 'hover:text-black hover:bg-white'}`} onClick={() => setSelectedCategory('all')}>All</button>
+              <button className={`border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider duration-300 ${selectedCategory === 'lp' ? 'bg-white text-black' : 'hover:text-black hover:bg-white'}`} onClick={() => setSelectedCategory('lp')}>LP制作</button>
+              <button className={`border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider duration-300 ${selectedCategory === 'corporate' ? 'bg-white text-black' : 'hover:text-black hover:bg-white'}`} onClick={() => setSelectedCategory('corporate')}>Web制作</button>
+              <button className={`border border-white text-sm rounded-lg w-[120px] h-[45px] flex items-center justify-center font-medium tracking-wider duration-300 ${selectedCategory === 'app' ? 'bg-white text-black' : 'hover:text-black hover:bg-white'}`} onClick={() => setSelectedCategory('app')}>Webアプリ</button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-12 md:container">
-              {workList.map((workItem, index) => {
+              {filteredList.map((workItem, index) => {
                 return (
                   <ProjectCard
                     id={workItem.id}
